@@ -24,14 +24,14 @@
                                 <div class="invalid-feedbackCURP" style="color-text:red; margin-top:5px; margin-left:10px; display:none;">Formato de CURP invalido.</div>
                             </div>
                         </div>
-                        <!-- <div class="col-md-1">
+                        <div class="col-md-1">
                             <button type="button" style="margin-top:30px;" class="btn btn-primary btn-rounded btn-icon" onclick="buscarCURP()">
                                 <i class="fa fa-search"></i>
                             </button>
-                            <button type="button" style="margin-top:30px;" class="btn btn-primary btn-rounded btn-icon" onclick="soap()">
+                            <!-- <button type="button" style="margin-top:30px;" class="btn btn-primary btn-rounded btn-icon" onclick="soap()">
                                 <i class="fa fa-search"></i>
-                            </button>
-                        </div> -->
+                            </button> -->
+                        </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="example-text-input" class="form-control-label">RFC</label>
@@ -39,11 +39,11 @@
                                 <div class="invalid-feedbackRFC" style="color-text:red; margin-top:5px; margin-left:10px; display:none;">Formato de RFC invalido.</div>
                             </div>
                         </div>
-                        <!-- <div class="col-md-1">
+                        <div class="col-md-1">
                             <button type="button" style="margin-top:30px;" class="btn btn-primary btn-rounded btn-icon" onclick="buscarRFC()">
                                 <i class="fa fa-search"></i>
                             </button>
-                        </div> -->
+                        </div>
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="example-text-input" class="form-control-label">Nombre</label>
@@ -339,7 +339,7 @@
                 'Content-Type': 'application/x-www-form-urlencoded'
 
             },
-            // contentType: "text/xml; charset=\"utf-8\"",
+            contentType: "multipart/form-data",
             success: function (msg) {
                 console.log(msg);
             },
@@ -385,9 +385,22 @@
     });
 
     function buscarCURP(){
-        var soapMessage = `<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tem="http://tempuri.org/">
-                            <soapenv:Header/>
-                            <soapenv:Body>
+        // var soapMessage = `<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tem="http://tempuri.org/">
+        //                     <soapenv:Header/>
+        //                     <soapenv:Body>
+        //                         <tem:Consulta_por_CURP>
+        //                             <!--Optional:-->
+        //                             <tem:Curp>GAGJ990916HTSRNN04</tem:Curp>
+        //                             <tem:id_Valor>11</tem:id_Valor>
+        //                             <!--Optional:-->
+        //                             <tem:Cadena>M3hx¡#¡nhU3a?LX</tem:Cadena>
+        //                         </tem:Consulta_por_CURP>
+        //                     </soapenv:Body>
+        //                    </soapenv:Envelope>`;
+
+        var soapMessage = `<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:tem="http://tempuri.org/">
+                            <soap:Header/>
+                            <soap:Body>
                                 <tem:Consulta_por_CURP>
                                     <!--Optional:-->
                                     <tem:Curp>GAGJ990916HTSRNN04</tem:Curp>
@@ -395,32 +408,35 @@
                                     <!--Optional:-->
                                     <tem:Cadena>M3hx¡#¡nhU3a?LX</tem:Cadena>
                                 </tem:Consulta_por_CURP>
-                            </soapenv:Body>
-                           </soapenv:Envelope>`;
+                            </soap:Body>
+                            </soap:Envelope>`;
                            
-        var url = "http://sce.tamaulipas.gob.mx/WS_RENAPO_V2/Consulta_curp.asmx";
-        $.support.cors = true;
+        var url = "https://sce.tamaulipas.gob.mx/WS_RENAPO_V2/Consulta_curp.asmx";
+        // $.support.cors = true;
         $.ajax({
             type: "POST",
             url: url,
             // jsonpCallback: "MyCallbackDED",
-            dataType: "xml",
-            // data: soapMessage,
+            dataType: "text/xml",
+            data: soapMessage,
             processData: false,
-            CORS: true ,
-            secure: true,
+            crossDomain: true,
+            // CORS: true ,
+            // secure: true,
             headers: {
-                'Access-Control-Allow-Origin': '*',
-                'Access-Control-Allow-Methods': 'DELETE, POST, GET, OPTIONS',
-                'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Requested-With'
+                // 'Access-Control-Allow-Origin': '*',
+                // 'Access-Control-Allow-Methods': 'DELETE, POST, GET, OPTIONS',
+                // 'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Requested-With'
 
             },
-            contentType: "text/xml; charset=\"utf-8\"",
+            // contentType: "text/xml; charset=utf-8",
             success: function (msg) {
                 console.log(msg);
             },
             error: function (msg) {
-                // alert("Failed: " + msg.status + ": " + msg.statusText);
+                alert("Failed: " + msg.status + ": " + msg.statusText);
+                // alert("Failed: " + msg);
+                // console.log(msg);
             }
 
         });
