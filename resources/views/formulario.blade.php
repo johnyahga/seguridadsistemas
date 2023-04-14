@@ -28,9 +28,9 @@
                             <button type="button" style="margin-top:30px;" class="btn btn-primary btn-rounded btn-icon" onclick="buscarCURP()">
                                 <i class="fa fa-search"></i>
                             </button>
-                            <!-- <button type="button" style="margin-top:30px;" class="btn btn-primary btn-rounded btn-icon" onclick="soap()">
+                            <button type="button" style="margin-top:30px;" class="btn btn-primary btn-rounded btn-icon" onclick="soap()">
                                 <i class="fa fa-search"></i>
-                            </button> -->
+                            </button>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
@@ -410,15 +410,34 @@
                                 </tem:Consulta_por_CURP>
                             </soap:Body>
                             </soap:Envelope>`;
+
+        // var soapMessage = '<xml data= <soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:tem="http://tempuri.org/">'
+        //                   +  '<soap:Header/>'
+        //                   +  '<soap:Body>'
+        //                   +      '<tem:Consulta_por_CURP>'
+        //                   +          '<!--Optional:-->'
+        //                   +          '<tem:Curp>GAGJ990916HTSRNN04</tem:Curp>'
+        //                   +          '<tem:id_Valor>11</tem:id_Valor>'
+        //                   +          '<!--Optional:-->'
+        //                   +          '<tem:Cadena>M3hx¡#¡nhU3a?LX</tem:Cadena>'
+        //                   +      '</tem:Consulta_por_CURP>'
+        //                   +  '</soap:Body>'
+        //                   +  '</soap:Envelope>" ';
                            
-        var url = "https://sce.tamaulipas.gob.mx/WS_RENAPO_V2/Consulta_curp.asmx";
+        var url = "https://sce.tamaulipas.gob.mx/WS_RENAPO_V2/Consulta_curp.asmx?wsdl";
         // $.support.cors = true;
         $.ajax({
-            type: "POST",
+            type: "post",
             url: url,
             // jsonpCallback: "MyCallbackDED",
             dataType: "text/xml",
+            contentType: "text/xml; charset=utf-8",
             data: soapMessage,
+            // data: {
+            //     Curp: 'GAGJ990916HTSRNNP4',
+            //     id_valor: 11,
+            //     Cadena: 'M3hx¡#¡nhU3a?LX'
+            // },
             processData: false,
             crossDomain: true,
             // CORS: true ,
@@ -427,14 +446,13 @@
                 // 'Access-Control-Allow-Origin': '*',
                 // 'Access-Control-Allow-Methods': 'DELETE, POST, GET, OPTIONS',
                 // 'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Requested-With'
-
+                // 'content-type': "text/xml; charset=utf-8"
             },
-            // contentType: "text/xml; charset=utf-8",
             success: function (msg) {
                 console.log(msg);
             },
             error: function (msg) {
-                alert("Failed: " + msg.status + ": " + msg.statusText);
+                // alert("Failed: " + msg.status + ": " + msg.statusText);
                 // alert("Failed: " + msg);
                 // console.log(msg);
             }
@@ -469,7 +487,7 @@
                 }
             }
             // Send the POST request
-            xmlhttp.setRequestHeader('Content-Type', 'text/xml');
+            // xmlhttp.setRequestHeader("content-type", "application/soap+xml; charset=UTF-8");
             xmlhttp.send(sr);
             // send request
             // ...

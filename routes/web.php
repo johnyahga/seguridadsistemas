@@ -20,7 +20,7 @@ Route::get('/', function () {
     return redirect('/personas');
 });
 
-Route::get('/test' , [personasController::class, "test"])->name("crud.test");
+Route::get('/test' , [personasController::class, "consumirSOAP"])->name("crud.test");
 // Route::get('/test','personasController@test');
 
 Route::get('/personas' , [personasController::class, "personas"])->name("personas-registros");
