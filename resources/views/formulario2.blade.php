@@ -27,6 +27,7 @@
                         <div class="form-group">
                                 <label for="example-text-input" class="form-control-label">CURP</label>
                                 <input class="form-control" onkeyup="javascript:this.value=this.value.toUpperCase();" value="{{ $persona[0]->curp }}" maxlength="18" name="curp" id="curp" type="text" placeholder="" required>
+                                <span class="spinner-border spinner-border-sm loader-curp" role="status" style="margin-left: 10px; margin-top:5px; display: none;" aria-hidden="true"></span>
                                 <div class="invalid-feedbackCURP" style="color-text:red; margin-top:5px; margin-left:10px; display:none;">Formato de CURP invalido.</div>
                             </div>
                         </div>
@@ -34,31 +35,32 @@
                             <div class="form-group">
                                 <label for="example-text-input" class="form-control-label">RFC</label>
                                 <input class="form-control" onkeyup="javascript:this.value=this.value.toUpperCase();" value="{{ $persona[0]->rfc }}" maxlength="13" name="rfc" id="rfc" type="text" placeholder="" required>
+                                <span class="spinner-border spinner-border-sm loader-rfc" role="status" style="margin-left: 10px; margin-top:5px; display: none;" aria-hidden="true"></span>
                                 <div class="invalid-feedbackRFC" style="color-text:red; margin-top:5px; margin-left:10px; display:none;">Formato de RFC invalido.</div>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="example-text-input" class="form-control-label">Nombre</label>
-                                <input class="form-control" name="nombre" value="{{ $persona[0]->nombre }}" type="text" placeholder="Nombre de la persona" required>
+                                <input class="form-control" name="nombre" id="nombre" value="{{ $persona[0]->nombre }}" type="text" placeholder="Nombre de la persona" required readonly>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="example-text-input" class="form-control-label">Apellido Paterno</label>
-                                <input class="form-control" name="apellido1" value="{{ $persona[0]->apellido_1 }}" type="text" placeholder="Jesse" required>
+                                <input class="form-control" name="apellido1" id="apellido1" value="{{ $persona[0]->apellido_1 }}" type="text" placeholder="Apellido paterno" required readonly>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="example-text-input" class="form-control-label">Apellido Materno</label>
-                                <input class="form-control" name="apellido2" value="{{ $persona[0]->apellido_2 }}" type="text" placeholder="Lucky" required>
+                                <input class="form-control" name="apellido2" id="apellido2" value="{{ $persona[0]->apellido_2 }}" type="text" placeholder="Apellido materno" required readonly>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="example-text-input" class="form-control-label">Genero</label>
-                                <select class="form-select" name="id_genero" id="select-genero" aria-label="Default select example" required>
+                                <select class="form-select" name="id_genero" id="select-genero" aria-label="Default select example" required readonly>
                                     <option>Seleccionar genero</option>
                                     @foreach($generos as $gen)
                                         @if($persona[0]->id_genero == $gen->id)
@@ -80,7 +82,7 @@
                         <div class="col-md-8">
                             <div class="form-group">
                                 <label for="example-text-input" class="form-control-label">Estado</label>
-                                <input class="form-control" type="text" id="estado" name="estado" placeholder="">
+                                <input class="form-control" type="text" id="estado" name="estado" placeholder="" readonly>
                             </div>
                         </div>
 
@@ -222,97 +224,169 @@
 
     function curpValida(curp) {
 
-        var re = /^([A-Z][AEIOUX][A-Z]{2}\d{2}(?:0[1-9]|1[0-2])(?:0[1-9]|[12]\d|3[01])[HM](?:AS|B[CS]|C[CLMSH]|D[FG]|G[TR]|HG|JC|M[CNS]|N[ETL]|OC|PL|Q[TR]|S[PLR]|T[CSL]|VZ|YN|ZS)[B-DF-HJ-NP-TV-Z]{3}[A-Z\d])(\d)$/,
-            validado = curp.match(re);
+    var re = /^([A-Z][AEIOUX][A-Z]{2}\d{2}(?:0[1-9]|1[0-2])(?:0[1-9]|[12]\d|3[01])[HM](?:AS|B[CS]|C[CLMSH]|D[FG]|G[TR]|HG|JC|M[CNS]|N[ETL]|OC|PL|Q[TR]|S[PLR]|T[CSL]|VZ|YN|ZS)[B-DF-HJ-NP-TV-Z]{3}[A-Z\d])(\d)$/,
+        validado = curp.match(re);
 
-        if (!validado)  //Coincide con el formato general?
-            return false;
+    if (!validado)  //Coincide con el formato general?
+        return false;
 
-        //Validar que coincida el dígito verificador
-        function digitoVerificador(curp17) {
-            //Fuente https://consultas.curp.gob.mx/CurpSP/
-            var diccionario  = "0123456789ABCDEFGHIJKLMNÑOPQRSTUVWXYZ",
-                lngSuma      = 0.0,
-                lngDigito    = 0.0;
-            for(var i=0; i<17; i++)
-                lngSuma = lngSuma + diccionario.indexOf(curp17.charAt(i)) * (18 - i);
-            lngDigito = 10 - lngSuma % 10;
-            if (lngDigito == 10) return 0;
-            return lngDigito;
-        }
+    //Validar que coincida el dígito verificador
+    function digitoVerificador(curp17) {
+        //Fuente https://consultas.curp.gob.mx/CurpSP/
+        var diccionario  = "0123456789ABCDEFGHIJKLMNÑOPQRSTUVWXYZ",
+            lngSuma      = 0.0,
+            lngDigito    = 0.0;
+        for(var i=0; i<17; i++)
+            lngSuma = lngSuma + diccionario.indexOf(curp17.charAt(i)) * (18 - i);
+        lngDigito = 10 - lngSuma % 10;
+        if (lngDigito == 10) return 0;
+        return lngDigito;
+    }
 
-        if (validado[2] != digitoVerificador(validado[1])) 
-            return false;
+    if (validado[2] != digitoVerificador(validado[1])) 
+        return false;
 
-        return true; //Validado
+    return true; //Validado
     }
 
     function rfcValido(rfc, aceptarGenerico = true) {
-        const re       = /^([A-ZÑ&]{3,4}) ?(?:- ?)?(\d{2}(?:0[1-9]|1[0-2])(?:0[1-9]|[12]\d|3[01])) ?(?:- ?)?([A-Z\d]{2})([A\d])$/;
-        var   validado = rfc.match(re);
+    const re       = /^([A-ZÑ&]{3,4}) ?(?:- ?)?(\d{2}(?:0[1-9]|1[0-2])(?:0[1-9]|[12]\d|3[01])) ?(?:- ?)?([A-Z\d]{2})([A\d])$/;
+    var   validado = rfc.match(re);
 
-        if (!validado)  //Coincide con el formato general del regex?
-            return false;
+    if (!validado)  //Coincide con el formato general del regex?
+        return false;
 
-        //Separar el dígito verificador del resto del RFC
-        const digitoVerificador = validado.pop(),
-            rfcSinDigito      = validado.slice(1).join(''),
-            len               = rfcSinDigito.length,
+    //Separar el dígito verificador del resto del RFC
+    const digitoVerificador = validado.pop(),
+        rfcSinDigito      = validado.slice(1).join(''),
+        len               = rfcSinDigito.length,
 
-        //Obtener el digito esperado
-            diccionario       = "0123456789ABCDEFGHIJKLMN&OPQRSTUVWXYZ Ñ",
-            indice            = len + 1;
-        var   suma,
-            digitoEsperado;
+    //Obtener el digito esperado
+        diccionario       = "0123456789ABCDEFGHIJKLMN&OPQRSTUVWXYZ Ñ",
+        indice            = len + 1;
+    var   suma,
+        digitoEsperado;
 
-        if (len == 12) suma = 0
-        else suma = 481; //Ajuste para persona moral
+    if (len == 12) suma = 0
+    else suma = 481; //Ajuste para persona moral
 
-        for(var i=0; i<len; i++)
-            suma += diccionario.indexOf(rfcSinDigito.charAt(i)) * (indice - i);
-        digitoEsperado = 11 - suma % 11;
-        if (digitoEsperado == 11) digitoEsperado = 0;
-        else if (digitoEsperado == 10) digitoEsperado = "A";
+    for(var i=0; i<len; i++)
+        suma += diccionario.indexOf(rfcSinDigito.charAt(i)) * (indice - i);
+    digitoEsperado = 11 - suma % 11;
+    if (digitoEsperado == 11) digitoEsperado = 0;
+    else if (digitoEsperado == 10) digitoEsperado = "A";
 
-        //El dígito verificador coincide con el esperado?
-        // o es un RFC Genérico (ventas a público general)?
-        if ((digitoVerificador != digitoEsperado)
-        && (!aceptarGenerico || rfcSinDigito + digitoVerificador != "XAXX010101000"))
-            return false;
-        else if (!aceptarGenerico && rfcSinDigito + digitoVerificador == "XEXX010101000")
-            return false;
-        return rfcSinDigito + digitoVerificador;
+    //El dígito verificador coincide con el esperado?
+    // o es un RFC Genérico (ventas a público general)?
+    if ((digitoVerificador != digitoEsperado)
+    && (!aceptarGenerico || rfcSinDigito + digitoVerificador != "XAXX010101000"))
+        return false;
+    else if (!aceptarGenerico && rfcSinDigito + digitoVerificador == "XEXX010101000")
+        return false;
+    return rfcSinDigito + digitoVerificador;
     }
 
     $("#curp").keyup(function(){
-        // console.log(this.value);
-        if(this.value == ''){
-            $('.invalid-feedbackCURP').css('display', 'none');
-            return 0;
-        }
-        if(curpValida(this.value)){
-            $('.invalid-feedbackCURP').css('display', 'none');
-            $('#curp').css('border-color', 'green');
-        }else{
-            $('.invalid-feedbackCURP').css('display', 'block');
-            $('#curp').css('border-color', 'red');
-        }
+    // console.log(this.value);
+    if(this.value == ''){
+        $('.invalid-feedbackCURP').css('display', 'none');
+        return 0;
+    }
+    if(curpValida(this.value)){
+        $('.invalid-feedbackCURP').css('display', 'none');
+        $('#curp').css('border-color', 'green');
+        buscarCURP(this.value);
+    }else{
+        $('.invalid-feedbackCURP').css('display', 'block');
+        $('#nombre').val('');
+        $('#apellido1').val('');
+        $('#apellido2').val('');
+        $('#estado').val('');
+        $('#curp').css('border-color', 'red');
+    }
     });
 
     $("#rfc").keyup(function(){
-        // console.log(this.value);
-        if(this.value == ''){            
-            $('.invalid-feedbackRFC').css('display', 'none');
-            return 0;
-        }
-        if(rfcValido(this.value)){
-            $('.invalid-feedbackRFC').css('display', 'none');
-            $('#rfc').css('border-color', 'green');
-        }else{
-            $('.invalid-feedbackRFC').css('display', 'block');
-            $('#rfc').css('border-color', 'red');
-        }
+    // console.log(this.value);
+    if(this.value == ''){            
+        $('.invalid-feedbackRFC').css('display', 'none');
+        return 0;
+    }
+    if(rfcValido(this.value)){
+        $('.invalid-feedbackRFC').css('display', 'none');
+        $('#rfc').css('border-color', 'green');
+    }else{
+        $('.invalid-feedbackRFC').css('display', 'block');
+        $('#rfc').css('border-color', 'red');
+    }
     });
+
+    function buscarCURP(curp){
+    $.ajax({
+        type: "GET",
+        url: '/buscar-curp',
+        dataType: "xml",
+        data: {
+            pcurp: curp
+        },
+        contentType: "multipart/form-data",
+        beforeSend: function () {
+            $('.loader-curp').css('display', 'block');
+        },
+        success: function (data) {
+            $('.loader-curp').css('display', 'none');
+            console.log(data.getElementsByTagName('NombreS')[0].childNodes[0].nodeValue);
+            var numEstados = [
+        'Aguascalientes',
+        'Baja California',
+        'Baja California Sur',
+        'Campeche',
+        'Chiapas',
+        'Chihuahua',
+        'Coahuila de Zaragoza',
+        'Colima',
+        'Ciudad de México',
+        'Durango',
+        'Guanajuato',
+        'Guerrero',
+        'Hidalgo',
+        'Jalisco',
+        'Mexico',
+        'Michoacan de Ocampo',
+        'Morelos',
+        'Nayarit',
+        'Nuevo Leon',
+        'Oaxaca',
+        'Puebla',
+        'Queretaro de Arteaga',
+        'Quintana Roo',
+        'San Luis Potosi',
+        'Sinaloa',
+        'Sonora',
+        'Tabasco',
+        'Tamaulipas',
+        'Tlaxcala',
+        'Veracruz-Llave',
+        'Yucatan',
+        'Zacatecas'];
+            $('#nombre').val(data.getElementsByTagName('NombreS')[0].childNodes[0].nodeValue);
+            $('#apellido1').val(data.getElementsByTagName('Apellido1')[0].childNodes[0].nodeValue);
+            $('#apellido2').val(data.getElementsByTagName('Apellido2')[0].childNodes[0].nodeValue);
+            var genero = data.getElementsByTagName('Sexo')[0].childNodes[0].nodeValue;
+            if(genero == "H")
+                $('#select-genero').val("1");
+            else if(genero == "M")
+                $('#select-genero').val("2");
+            var numEst = data.getElementsByTagName('NumEntidadReg')[0].childNodes[0].nodeValue - 1;
+            $('#estado').val(numEstados[numEst]);
+
+        },
+        error: function (msg) {
+            alert("Failed: " + msg.status + ": " + msg.statusText);
+        }
+
+    });
+    }
 
     function ValidateForm() {
         var formInvalid = false;

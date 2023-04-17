@@ -23,6 +23,8 @@ Route::get('/', function () {
 Route::get('/test' , [personasController::class, "consumirSOAP"])->name("crud.test");
 // Route::get('/test','personasController@test');
 
+Route::get('/buscar-curp' , [personasController::class, "consumirSOAP"])->name("buscar-curp");
+
 Route::get('/personas' , [personasController::class, "personas"])->name("personas-registros");
 Route::get('/personas-form' , [personasController::class, "personasForm"])->name("personas-form");
 Route::get('/get-persona' , [personasController::class, "getPersona"])->name("get-persona");

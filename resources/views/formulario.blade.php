@@ -21,52 +21,55 @@
                         <div class="form-group">
                                 <label for="example-text-input" class="form-control-label">CURP</label>
                                 <input class="form-control" style="border-color: #dc3545" onkeyup="javascript:this.value=this.value.toUpperCase();" maxlength="18" name="curp" id="curp" type="text" placeholder="" required>
+                                <span class="spinner-border spinner-border-sm loader-curp" role="status" style="margin-left: 10px; margin-top:5px; display: none;" aria-hidden="true"></span>
                                 <div class="invalid-feedbackCURP" style="color-text:red; margin-top:5px; margin-left:10px; display:none;">Formato de CURP invalido.</div>
                             </div>
                         </div>
-                        <div class="col-md-1">
+                        <!-- <div class="col-md-1">
                             <button type="button" style="margin-top:30px;" class="btn btn-primary btn-rounded btn-icon" onclick="buscarCURP()">
                                 <i class="fa fa-search"></i>
                             </button>
                             <button type="button" style="margin-top:30px;" class="btn btn-primary btn-rounded btn-icon" onclick="soap()">
                                 <i class="fa fa-search"></i>
                             </button>
-                        </div>
+                        </div> -->
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="example-text-input" class="form-control-label">RFC</label>
                                 <input class="form-control" onkeyup="javascript:this.value=this.value.toUpperCase();" maxlength="13" name="rfc" id="rfc" type="text" placeholder="" required>
+                                <span class="spinner-border spinner-border-sm loader-rfc" role="status" style="margin-left: 10px; margin-top:5px; display: none;" aria-hidden="true"></span>
+                                <!-- <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> -->
                                 <div class="invalid-feedbackRFC" style="color-text:red; margin-top:5px; margin-left:10px; display:none;">Formato de RFC invalido.</div>
                             </div>
                         </div>
-                        <div class="col-md-1">
+                        <!-- <div class="col-md-1">
                             <button type="button" style="margin-top:30px;" class="btn btn-primary btn-rounded btn-icon" onclick="buscarRFC()">
                                 <i class="fa fa-search"></i>
                             </button>
-                        </div>
+                        </div> -->
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="example-text-input" class="form-control-label">Nombre</label>
-                                <input class="form-control" name="nombre" id="nombre" type="text" placeholder="Nombre de la persona" required>
+                                <input class="form-control" name="nombre" id="nombre" type="text" placeholder="Nombre de la persona" required readonly>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="example-text-input" class="form-control-label">Apellido Paterno</label>
-                                <input class="form-control" name="apellido1" id="apellido1" type="text" placeholder="Apellido Paterno" required>
+                                <input class="form-control" name="apellido1" id="apellido1" type="text" placeholder="Apellido Paterno" required readonly>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="example-text-input" class="form-control-label">Apellido Materno</label>
-                                <input class="form-control" name="apellido2" id="apellido2" type="text" placeholder="Apellido Materno" required>
+                                <input class="form-control" name="apellido2" id="apellido2" type="text" placeholder="Apellido Materno" required readonly>
                             </div>
                         </div>
 
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="example-text-input" class="form-control-label">Genero</label>
-                                <select class="form-select" name="id_genero" id="select-genero" aria-label="Default select example" required>
+                                <select class="form-select" name="id_genero" id="select-genero" aria-label="Default select example" required readonly>
                                     <option selected>Seleccionar genero</option>
                                     @foreach($generos as $gen)
                                         <option value="{{ $gen->id }}"> {{ $gen->genero }} </option>
@@ -84,7 +87,7 @@
                         <div class="col-md-8">
                             <div class="form-group">
                                 <label for="example-text-input" class="form-control-label">Estado</label>
-                                <input class="form-control" type="text" id="estado" name="estado" placeholder="" required>
+                                <input class="form-control" type="text" id="estado" name="estado" placeholder="" required readonly>
                             </div>
                         </div>
 
@@ -297,8 +300,13 @@
         if(curpValida(this.value)){
             $('.invalid-feedbackCURP').css('display', 'none');
             $('#curp').css('border-color', 'green');
+            buscarCURP(this.value);
         }else{
             $('.invalid-feedbackCURP').css('display', 'block');
+            $('#nombre').val('');
+            $('#apellido1').val('');
+            $('#apellido2').val('');
+            $('#estado').val('');
             $('#curp').css('border-color', 'red');
         }
     });
@@ -318,9 +326,74 @@
         }
     });
 
+    function buscarCURP(curp){
+        $.ajax({
+            type: "GET",
+            url: '/buscar-curp',
+            dataType: "xml",
+            data: {
+                pcurp: curp
+            },
+            contentType: "multipart/form-data",
+            beforeSend: function () {
+                $('.loader-curp').css('display', 'block');
+            },
+            success: function (data) {
+                $('.loader-curp').css('display', 'none');
+                console.log(data.getElementsByTagName('NombreS')[0].childNodes[0].nodeValue);
+                var numEstados = [
+			'Aguascalientes',
+			'Baja California',
+			'Baja California Sur',
+			'Campeche',
+			'Chiapas',
+			'Chihuahua',
+			'Coahuila de Zaragoza',
+			'Colima',
+			'Ciudad de México',
+			 'Durango',
+			 'Guanajuato',
+			 'Guerrero',
+			 'Hidalgo',
+			 'Jalisco',
+			 'Mexico',
+			 'Michoacan de Ocampo',
+			 'Morelos',
+			 'Nayarit',
+			 'Nuevo Leon',
+			 'Oaxaca',
+			 'Puebla',
+			 'Queretaro de Arteaga',
+			 'Quintana Roo',
+			 'San Luis Potosi',
+			 'Sinaloa',
+			 'Sonora',
+			 'Tabasco',
+			 'Tamaulipas',
+			 'Tlaxcala',
+			 'Veracruz-Llave',
+			 'Yucatan',
+			 'Zacatecas'];
+                $('#nombre').val(data.getElementsByTagName('NombreS')[0].childNodes[0].nodeValue);
+                $('#apellido1').val(data.getElementsByTagName('Apellido1')[0].childNodes[0].nodeValue);
+                $('#apellido2').val(data.getElementsByTagName('Apellido2')[0].childNodes[0].nodeValue);
+                var genero = data.getElementsByTagName('Sexo')[0].childNodes[0].nodeValue;
+                if(genero == "H")
+                    $('#select-genero').val("1");
+                else if(genero == "M")
+                    $('#select-genero').val("2");
+                var numEst = data.getElementsByTagName('NumEntidadReg')[0].childNodes[0].nodeValue - 1;
+                $('#estado').val(numEstados[numEst]);
 
+            },
+            error: function (msg) {
+                alert("Failed: " + msg.status + ": " + msg.statusText);
+            }
 
-    function buscarRFC(){
+        });
+    }
+
+    function buscarRFC2(){
         $.ajax({
             type: "GET",
             url: 'https://proyectoscete.tamaulipas.gob.mx/insumos/public/servicios/',
@@ -384,20 +457,7 @@
         $('#confirmarModalBody').html('¿Seguro que desea registrar los datos?');
     });
 
-    function buscarCURP(){
-        // var soapMessage = `<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tem="http://tempuri.org/">
-        //                     <soapenv:Header/>
-        //                     <soapenv:Body>
-        //                         <tem:Consulta_por_CURP>
-        //                             <!--Optional:-->
-        //                             <tem:Curp>GAGJ990916HTSRNN04</tem:Curp>
-        //                             <tem:id_Valor>11</tem:id_Valor>
-        //                             <!--Optional:-->
-        //                             <tem:Cadena>M3hx¡#¡nhU3a?LX</tem:Cadena>
-        //                         </tem:Consulta_por_CURP>
-        //                     </soapenv:Body>
-        //                    </soapenv:Envelope>`;
-
+    function buscarCURP2(){
         var soapMessage = `<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:tem="http://tempuri.org/">
                             <soap:Header/>
                             <soap:Body>
@@ -410,19 +470,6 @@
                                 </tem:Consulta_por_CURP>
                             </soap:Body>
                             </soap:Envelope>`;
-
-        // var soapMessage = '<xml data= <soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:tem="http://tempuri.org/">'
-        //                   +  '<soap:Header/>'
-        //                   +  '<soap:Body>'
-        //                   +      '<tem:Consulta_por_CURP>'
-        //                   +          '<!--Optional:-->'
-        //                   +          '<tem:Curp>GAGJ990916HTSRNN04</tem:Curp>'
-        //                   +          '<tem:id_Valor>11</tem:id_Valor>'
-        //                   +          '<!--Optional:-->'
-        //                   +          '<tem:Cadena>M3hx¡#¡nhU3a?LX</tem:Cadena>'
-        //                   +      '</tem:Consulta_por_CURP>'
-        //                   +  '</soap:Body>'
-        //                   +  '</soap:Envelope>" ';
                            
         var url = "https://sce.tamaulipas.gob.mx/WS_RENAPO_V2/Consulta_curp.asmx?wsdl";
         // $.support.cors = true;
@@ -459,40 +506,6 @@
 
         });
     }
-
-    function soap() {
-            var xmlhttp = new XMLHttpRequest();
-            xmlhttp.open('POST', 'https://sce.tamaulipas.gob.mx/WS_RENAPO_V2/Consulta_curp.asmx', true);
-
-            // build SOAP request
-            var sr = `<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tem="http://tempuri.org/">
-                            <soapenv:Header/>
-                             <soapenv:Body>
-                                 <tem:Consulta_por_CURP>
-                                     <!--Optional:-->
-                                     <tem:Curp>GAGJ990916HTSRNN04</tem:Curp>
-                                     <tem:id_Valor>11</tem:id_Valor>
-                                     <!--Optional:-->
-                                     <tem:Cadena>M3hx¡#¡nhU3a?LX</tem:Cadena>
-                                 </tem:Consulta_por_CURP>
-                             </soapenv:Body>
-                            </soapenv:Envelope>`;
-
-            xmlhttp.onreadystatechange = function () {
-                if (xmlhttp.readyState == 4) {
-                    if (xmlhttp.status == 200) {
-                        alert(xmlhttp.responseText);
-                        // alert('done. use firebug/console to see network response');
-                    }
-                }
-            }
-            // Send the POST request
-            // xmlhttp.setRequestHeader("content-type", "application/soap+xml; charset=UTF-8");
-            xmlhttp.send(sr);
-            // send request
-            // ...
-        }
-
 
     function loadGeneros(){
         if($('#nombre_genero').val() != ''){
