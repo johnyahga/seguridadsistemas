@@ -60,7 +60,7 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="example-text-input" class="form-control-label">Genero</label>
-                                <select class="form-select" name="id_genero" id="select-genero" aria-label="Default select example" required readonly>
+                                <select class="form-select" name="id_genero" id="select-genero" aria-label="Default select example" required disabled>
                                     <option>Seleccionar genero</option>
                                     @foreach($generos as $gen)
                                         @if($persona[0]->id_genero == $gen->id)
@@ -209,8 +209,18 @@
        if(accion != ""){
         switch (accion) {
             case 'error':
+                $('#curp').val('<?PHP printf( (!empty($datos['curp']) ? strval($datos['curp']) : '""') ); ?>');
+                $('#rfc').val('<?PHP printf( (!empty($datos['rfc']) ? strval($datos['rfc']) : '""') ); ?>');
+                $('#nombre').val('<?PHP printf( (!empty($datos['nombre']) ? strval($datos['nombre']) : '""') ); ?>');
+                $('#apellido1').val('<?PHP printf( (!empty($datos['apellido1']) ? strval($datos['apellido1']) : '""') ); ?>');
+                $('#apellido2').val('<?PHP printf( (!empty($datos['apellido2']) ? strval($datos['apellido2']) : '""') ); ?>');
+                $('#select-genero').val('<?PHP printf( (!empty($datos['id_genero']) ? strval($datos['id_genero']) : '""') ); ?>');
+                $('#estado').val('<?PHP printf( (!empty($datos['estado']) ? strval($datos['estado']) : '""') ); ?>');
+                $('#mail_personal').val('<?PHP printf( (!empty($datos['mail_personal']) ? strval($datos['mail_personal']) : '""') ); ?>');
+                $('#mail_instit').val('<?PHP printf( (!empty($datos['mail_instit']) ? strval($datos['mail_instit']) : '""') ); ?>');
+                $('#domicilio').val('<?PHP printf( (!empty($datos['domicilio']) ? strval($datos['domicilio']) : '""') ); ?>');
                 Swal.fire(
-                        'Error al insertar registro',
+                        'Error al modificar el registro',
                         msg,
                         'error'
                         );
@@ -220,6 +230,7 @@
                 break;
         }
        }
+       buscarCURP($('#curp').val());
     });
 
     function curpValida(curp) {
@@ -334,6 +345,7 @@
             $('.loader-curp').css('display', 'block');
         },
         success: function (data) {
+            try {
             $('.loader-curp').css('display', 'none');
             console.log(data.getElementsByTagName('NombreS')[0].childNodes[0].nodeValue);
             var numEstados = [
@@ -379,10 +391,22 @@
                 $('#select-genero').val("2");
             var numEst = data.getElementsByTagName('NumEntidadReg')[0].childNodes[0].nodeValue - 1;
             $('#estado').val(numEstados[numEst]);
+        } catch (error) {
+            Swal.fire(
+                        'Error al validar la CURP',
+                        'Ha ocurrido un error al validar el dato CURP, intentelo más tarde',
+                        'error'
+                        );   
+        }
 
         },
         error: function (msg) {
-            alert("Failed: " + msg.status + ": " + msg.statusText);
+            Swal.fire(
+                        'Error al validar la CURP',
+                        'Ha ocurrido un error al validar el dato CURP, intentelo más tarde',
+                        'error'
+                        );
+                $('.loader-curp').css('display', 'none');
         }
 
     });

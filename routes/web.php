@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\personasController;
+use App\Http\Controllers\usuariosController;
 use Illuminate\Http\Request; 
 
 /*
@@ -37,38 +38,6 @@ Route::get('/eliminar-persona' , [personasController::class, "eliminarPersona"])
 Route::post('/insertar-persona' , [personasController::class, "insertarPersona"])->name("insertar-persona");
 Route::get('/insertar-genero' , [personasController::class, "insertarGenero"])->name("insertar-genero");
 
-// Route::get('/personas', function () {
-//     $data =  DB::select('select * from personas.getpersonas()');
-//     return view('personas')->with("registros", $data);
-// })->name('personas-registros');
-
-// Route::get('/personas-form', function () {
-//     $generos = DB::select('select * from personas.getgeneros()');
-//     return view('formulario')->with("generos", $generos);
-// })->name('personas-form');
-
-// Route::get('/get-persona', function(Request $req){
-//     $persona = DB::select("select * from personas.getpersona($req->id_persona)");
-//     return $persona;
-// })->name('get-persona');
-
-// Route::get('/get-personas', function(Request $req){
-//     $personas = DB::select('select * from personas.getpersonas()');
-//     return $personas;
-// })->name('get-personas');
-
-// Route::get('/get-generos', function(){
-//     $generos = DB::select('select * from personas.getgeneros()');
-//     return $generos;
-// })->name('get-generos');
-
-// Route::get('/editar-persona-form', function (Request $req) {
-//     $persona = DB::select("select * from personas.getpersona($req->id_persona)");
-//     $generos = DB::select('select * from personas.getgeneros()');
-//     return view('formulario2', compact('persona', 'generos'));
-//     // return redirect()->route('personas', ['personas' => $persona, 'generos' => $generos]);
-// })->name('editar-persona-form');
-
 Route::get('/editar-personas', function(Request $req){
     try {
     $generos = DB::select("CALL personas.actualizarpersona($req->id_persona,'$req->curp', '$req->rfc', '$req->nombre', '$req->apellido1', '$req->apellido2', '$req->mail_personal', '$req->mail_instit','$req->domicilio', $req->id_genero)");
@@ -86,16 +55,15 @@ Route::get('/editar-personas', function(Request $req){
         $errormsg = explode('ERROR:',$ex->getMessage());
         $errormsg = explode('CONTEXT',$errormsg[1]);
         $errormsg = trim($errormsg[0]);
+
+        if(strlen($errormsg) > 61)
+        $errormsg = trim(explode('DETAIL:', $errormsg)[1]);
         $persona = DB::select("select * from personas.getpersona($req->id_persona)");
+        $datos = $req->all();
         $accion = 'error';
-        return view('formulario2', compact('generos', 'accion', 'errormsg', 'persona'));
+        return view('formulario2', compact('generos', 'accion', 'errormsg', 'persona', 'datos'));
     }
 })->name('editar-personas');
-
-// Route::get('/eliminar-persona', function(Request $req){
-//     $generos = DB::select("CALL personas.eliminarpersona($req->id_persona)");
-//     return $generos;
-// })->name('eliminar-persona');
 
 Route::post('/insertar-persona', function(Request $req){
     try {
@@ -120,12 +88,7 @@ Route::post('/insertar-persona', function(Request $req){
     }
 })->name('insertar-persona');
 
-// Route::get('/insertar-genero', function(Request $req){
-//     // print_r($req->all());
-//     DB::select("CALL personas.insertargenero('$req->nombre')");
-//     $generos = DB::select('select * from personas.getgeneros()');
-//     return $generos;
-// })->name('insertar-genero');
-
-// Route::get('/personas-form','personasController@nuevaPersona')->name('personas-form');
-
+Route::get('/usuarios', [usuariosController::class, "usuarios"])->name("usuarios-registros");
+Route::get('/aplicaciones', [personasController::class, "usuarios"])->name("aplicaciones-registros");
+Route::get('/permisos', [personasController::class, "usuarios"])->name("permisos-registros");
+Route::get('/roles', [usuariosController::class, "usuarios"])->name("roles-registros");

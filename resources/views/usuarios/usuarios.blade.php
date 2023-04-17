@@ -9,7 +9,7 @@
     <div class="card ">
         <div class="card-header pb-0 p-3">
             <div class="d-flex justify-content-between">
-                <h6 class="mb-2">Registros Personas</h6> 
+                <h6 class="mb-2">Registros Usuarios</h6> 
             </div>
         </div>
         <!-- descomentar en caso de que falle el responsive -->
@@ -20,12 +20,11 @@
                 <thead>
                   <tr>
                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Id</th>
-                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Nombre</th>
-                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Apellido Paterno</th>
-                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Apellido Materno</th>
-                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">CURP</th>
-                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">RFC</th>
-                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Genero</th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Usuario</th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Persona asociada</th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Estado</th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Fecha de registro</th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Fecha de modificación</th>
                     <th class="text-secondary opacity-7"></th>
                   </tr>
                 </thead>
@@ -39,7 +38,6 @@
                                 <td class="mb-0 text-sm"> {{ $registro->apellido_2 }} </td>
                                 <td class="mb-0 text-sm"> {{ $registro->curp }} </td>
                                 <td class="mb-0 text-sm"> {{ $registro->rfc  }} </td>
-                                <td class="mb-0 text-sm"> {{ $registro->genero  }} </td> 
                                 <td class="align-middle">
                                     <div class="dropdown">
                                         <button class="btn btn-link text-secondary mb-0 "
@@ -78,7 +76,6 @@
                             <td class="mb-0 text-sm"> {{ $registros[0]->apellido_2 }} </td>
                             <td class="mb-0 text-sm"> {{ $registros[0]->curp }} </td>
                             <td class="mb-0 text-sm"> {{ $registros[0]->rfc  }} </td>
-                            <td class="mb-0 text-sm"> {{ $registros[0]->genero  }} </td>
                             <td class="align-middle">
                                 <div class="dropdown">
                                     <button class="btn btn-link text-secondary mb-0 "
