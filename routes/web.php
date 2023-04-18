@@ -21,7 +21,7 @@ Route::get('/', function () {
     return redirect('/personas');
 });
 
-Route::get('/test' , [personasController::class, "consumirSOAP"])->name("crud.test");
+Route::get('/test' , [personasController::class, "wsrfc"])->name("crud.test");
 // Route::get('/test','personasController@test');
 
 Route::get('/buscar-curp' , [personasController::class, "consumirSOAP"])->name("buscar-curp");
@@ -89,6 +89,7 @@ Route::post('/insertar-persona', function(Request $req){
 })->name('insertar-persona');
 
 Route::get('/usuarios', [usuariosController::class, "usuarios"])->name("usuarios-registros");
+Route::get('/usuarios/get-usuario', [usuariosController::class, "getUsuario"])->name("ver-usuario");
 Route::get('/aplicaciones', [personasController::class, "usuarios"])->name("aplicaciones-registros");
 Route::get('/permisos', [personasController::class, "usuarios"])->name("permisos-registros");
 Route::get('/roles', [usuariosController::class, "usuarios"])->name("roles-registros");

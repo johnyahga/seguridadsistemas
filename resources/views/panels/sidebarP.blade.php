@@ -41,7 +41,7 @@
         </li>
 
         <li class="nav-item">
-          <a class="nav-link " href="{{ route('personas-form') }}">
+          <a class="nav-link {{ Request::path() ==  'aplicaciones' ? 'active' : ''  }}" href="{{ route('personas-form') }}">
             <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
               <i class="fas fa-box text-white text-sm opacity-10" aria-hidden="true"></i>
             </div>
@@ -50,7 +50,7 @@
         </li>
 
         <li class="nav-item">
-          <a class="nav-link " href="{{ route('personas-form') }}">
+          <a class="nav-link {{ Request::path() ==  'roles' ? 'active' : ''  }}" href="{{ route('personas-form') }}">
             <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
               <i class="fas fa-user-circle text-white text-sm opacity-10" aria-hidden="true"></i>
             </div>
@@ -59,7 +59,7 @@
         </li>
 
         <li class="nav-item">
-          <a class="nav-link " href="{{ route('personas-form') }}">
+          <a class="nav-link {{ Request::path() ==  'permisos' ? 'active' : ''  }}" href="{{ route('personas-form') }}">
             <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
               <i class="fas fa-hand-holding text-white text-sm opacity-10" aria-hidden="true"></i>
             </div>
@@ -68,7 +68,7 @@
         </li>
 
         <li class="nav-item">
-          <a class="nav-link " href="{{ route('personas-form') }}">
+          <a class="nav-link {{ Request::path() ==  'configuracion' ? 'active' : ''  }}" href="{{ route('personas-form') }}">
             <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
               <i class="fas fa-cog text-white text-sm opacity-10" aria-hidden="true"></i>
             </div>

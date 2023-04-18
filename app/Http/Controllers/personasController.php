@@ -145,4 +145,33 @@ class personasController extends Controller
 
 
     }
+
+    public function wsrfc(){
+            // https://agsc.siat.sat.gob.mx/PTSC/ValidaRFC/index.jsf
+
+            $data = [];
+
+            $server = 'https://agsc.siat.sat.gob.mx/PTSC/ValidaRFC/index.jsf';
+            $headers = [
+                "content-type: text/xml; charset=utf-8",
+                "Content-length: " . strlen($requestXML), "Connection: close",
+            ];
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $server);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($ch, CURLOPT_TIMEOUT, 100);
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+            $data = curl_exec($ch);
+
+            return $data;
+
+            if (curl_errno($ch)) {
+                print curl_error($ch);
+                echo "Algo fallo";
+            } else {
+                curl_close($ch);
+            }
+    }
 }

@@ -11,6 +11,9 @@
             <div class="d-flex justify-content-between">
                 <h6 class="mb-2">Registros Usuarios</h6> 
             </div>
+            <div>
+              <button type="button" class="btn btn-primary">Nuevo Usuario</button>
+            </div>
         </div>
         <!-- descomentar en caso de que falle el responsive -->
         <div class="table-responsive">
@@ -23,8 +26,8 @@
                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Usuario</th>
                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Persona asociada</th>
                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Estado</th>
-                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Fecha de registro</th>
-                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Fecha de modificación</th>
+                    <!-- <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Fecha de registro</th> -->
+                    <!-- <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Fecha de modificación</th> -->
                     <th class="text-secondary opacity-7"></th>
                   </tr>
                 </thead>
@@ -33,11 +36,11 @@
                         @foreach($registros as $registro)
                             <tr >
                                 <td class="align-middle text-center text-sm"> {{ $registro->id }} </td>
-                                <td class="mb-0 text-sm"> {{ $registro->nombre }} </td><!--class="text-xs text-secondary mb-0"-->
-                                <td class="mb-0 text-sm"> {{ $registro->apellido_1 }} </td>
-                                <td class="mb-0 text-sm"> {{ $registro->apellido_2 }} </td>
-                                <td class="mb-0 text-sm"> {{ $registro->curp }} </td>
-                                <td class="mb-0 text-sm"> {{ $registro->rfc  }} </td>
+                                <td class="mb-0 text-sm"> {{ $registro->user_name }} </td><!--class="text-xs text-secondary mb-0"-->
+                                <td class="mb-0 text-sm"> {{ $registro->nombre_persona }} </td>
+                                <td class="mb-0 text-sm"> {{ $registro->estado ? 'Activo' : 'Inactivo' }} </td>
+                                <!-- <td class="mb-0 text-sm"> {{ $registro->fecha_registro }} </td> -->
+                                <!-- <td class="mb-0 text-sm"> {{ $registro->fecha_modifica  }} </td> -->
                                 <td class="align-middle">
                                     <div class="dropdown">
                                         <button class="btn btn-link text-secondary mb-0 "
@@ -71,11 +74,11 @@
                     @elseif( count($registros)==1)
                         <tr >
                             <td class="align-middle text-center text-sm"> {{ $registros[0]->id }} </td>
-                            <td class="mb-0 text-sm"> {{ $registros[0]->nombre }} </td><!--class="text-xs text-secondary mb-0"-->
-                            <td class="mb-0 text-sm"> {{ $registros[0]->apellido_1 }} </td>
-                            <td class="mb-0 text-sm"> {{ $registros[0]->apellido_2 }} </td>
-                            <td class="mb-0 text-sm"> {{ $registros[0]->curp }} </td>
-                            <td class="mb-0 text-sm"> {{ $registros[0]->rfc  }} </td>
+                            <td class="mb-0 text-sm"> {{ $registros[0]->user_name }} </td><!--class="text-xs text-secondary mb-0"-->
+                            <td class="mb-0 text-sm"> {{ $registros[0]->nombre_persona }} </td>
+                            <td class="mb-0 text-sm"> {{ $registros[0]->estado ? 'Activo' : 'Inactivo' }} </td>
+                            <!-- <td class="mb-0 text-sm"> {{ $registros[0]->fecha_registro }} </td> -->
+                            <!-- <td class="mb-0 text-sm"> {{ $registros[0]->fecha_modifica  }} </td> -->
                             <td class="align-middle">
                                 <div class="dropdown">
                                     <button class="btn btn-link text-secondary mb-0 "
@@ -122,7 +125,7 @@
   <div class="modal-dialog modal-xl">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Datos de la Persona</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Datos de Usuario</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
@@ -137,70 +140,48 @@
 
                   <div class="col-6">
                     <div class="form-group">
-                      <label for="curp">CURP</label>
+                      <label for="user_name">Usuario</label>
+                      <input type="text" id="verUser" class="form-control" name="verUser" value="" readonly>
+                    </div>
+                  </div>
+
+                  <div class="col-3">
+                    <div class="form-group">
+                      <label for="verPersona">Persona</label>
+                      <input type="text" id="verPersona" class="form-control" name="verPersona" value="" readonly>
+                    </div>
+                  </div>
+
+                  <div class="col-3">
+                    <div class="form-group">
+                      <label for="verCURP">CURP</label>
                       <input type="text" id="verCURP" class="form-control" name="verCURP" value="" readonly>
                     </div>
                   </div>
 
-                  <div class="col-6">
+                  <div class="col-4">
                     <div class="form-group">
-                      <label for="rfc">RFC</label>
-                      <input type="text" id="verRFC" class="form-control" name="verRFC" value="" readonly>
-                    </div>
-                  </div>
-
-                  <div class="col-6">
-                    <div class="form-group">
-                      <label for="nombre_persona">Nombre</label>
-                      <input type="text" id="verNombre" class="form-control" name="" readonly 
+                      <label for="VerEstado">Estado del usuario</label>
+                      <input type="text" id="verEstado" class="form-control" name="" readonly 
                       value="">
                     </div>
                   </div>
-                  <div class="col-6">
+                  <div class="col-4">
                     <div class="form-group">
-                      <label for="apellido_paterno">Apellido paterno</label>
-                      <input type="text" id="verApellido1" class="form-control" name="" 
+                      <label for="verFecha1">Fecha de registro</label>
+                      <input type="text" id="verFecha1" class="form-control" name="" 
                         readonly value="">
                     </div>
                   </div>
 
-                  <div class="col-6">
+                  <div class="col-4">
                     <div class="form-group">
-                      <label for="apellido_materno">Apellido materno</label>
-                      <input type="text" id="verApellido2" class="form-control" name="" 
+                      <label for="vetFecha2">Fecha de modificación</label>
+                      <input type="text" id="verFecha2" class="form-control" name="" 
                         readonly value="">
                     </div>
                   </div>
-                  <div class="col-6">
-                    <div class="form-group">
-                      <label for="genero">Genero</label>
-                      <input type="text" id="verGenero" class="form-control"  maxlength="90"
-                        readonly value="{{ old('escuela') }}">
-                    </div>
-                  </div>
 
-                  <div class="col-6">
-                    <div class="form-group">
-                      <label for="email_personal">Correo personal</label>
-                      <input type="email" id="verEmail1" class="form-control" name="" 
-                     readonly>
-                    </div>
-                  </div>
-                  <div class="col-6">
-                    <div class="form-group">
-                      <label for="email_instit">Correo institucional</label>
-                      <input type="email" id="verEmail2" class="form-control" name="" 
-                        readonly>
-                    </div>
-                  </div>
-
-                  <div class="col-12">
-                    <div class="form-group">
-                      <label for="domicilio">Domicilio</label>
-                      <input type="text" id="verDomicilio" class="form-control"
-                        name="" value="" readonly>
-                    </div>
-                  </div>
 
                 </div>
               </div>
@@ -326,22 +307,22 @@
         $('#loaderVista').css('display','block');
         $.ajax({
                 method: "get",
-                url: "get-persona",
-                data: { id_persona: id },
+                url: "usuarios/get-usuario",
+                data: { id_usuario: id },
                 beforeSend: function() {
 
                 },
                 success:function(data) {
                   $('#loaderVista').css('display','none');
-                    $('#verRFC').val(data[0].rfc);
+                    $('#verUser').val(data[0].user_name);
+                    $('#verPersona').val(data[0].nombre_persona);
+                    if(data[0].estado)
+                      $('#verEstado').val('Activo');
+                    else
+                      $('#verEstado').val('Inactivo');
+                    $('#verFecha1').val(data[0].fecha_registro);
+                    $('#verFecha2').val(data[0].fecha_modifica);
                     $('#verCURP').val(data[0].curp);
-                    $('#verNombre').val(data[0].nombre);
-                    $('#verApellido1').val(data[0].apellido_1);
-                    $('#verApellido2').val(data[0].apellido_2);
-                    $('#verGenero').val(data[0].genero);
-                    $('#verEmail1').val(data[0].mail_personal);
-                    $('#verEmail2').val(data[0].mail_instit);
-                    $('#verDomicilio').val(data[0].domicilio);
                 },
                 error:function( ) {
                     
