@@ -39,6 +39,12 @@
                                 <div class="invalid-feedbackRFC" style="color-text:red; margin-top:5px; margin-left:10px; display:none;">Formato de RFC invalido.</div>
                             </div>
                         </div>
+                        <div class="col-md-12" style="display:none;">
+                        <div class="form-group">
+                                <label for="example-text-input" class="form-control-label">timestamp</label>
+                                <input class="form-control" name="tmp_curp" id="tmp_curp" type="text" placeholder="" required readonly>
+                            </div>
+                        </div>
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="example-text-input" class="form-control-label">Nombre</label>
@@ -60,7 +66,7 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="example-text-input" class="form-control-label">Genero</label>
-                                <select class="form-select" name="id_genero" id="select-genero" aria-label="Default select example" required disabled>
+                                <select class="form-select" name="id_genero" id="select-genero" aria-label="Default select example" required>
                                     <option>Seleccionar genero</option>
                                     @foreach($generos as $gen)
                                         @if($persona[0]->id_genero == $gen->id)
@@ -198,6 +204,28 @@
 
 <script>
     var tabla;
+    function padTo2Digits(num) {
+        return num.toString().padStart(2, '0');
+    }
+
+    function formatDate(date) {
+    return (
+        [
+        date.getFullYear(),
+        padTo2Digits(date.getMonth() + 1),
+        padTo2Digits(date.getDate()),
+        ].join('-') +
+        ' ' +
+        [
+        padTo2Digits(date.getHours()),
+        padTo2Digits(date.getMinutes()),
+        padTo2Digits(date.getSeconds()),
+        ].join(':')
+    );
+    }
+
+    // (mm/dd/yyyy hh:mm:ss)
+    console.log(formatDate(new Date()));
 
     $(document).ready(function () {
         // console.log('hola mundo');
@@ -219,6 +247,7 @@
                 $('#mail_personal').val('<?PHP printf( (!empty($datos['mail_personal']) ? strval($datos['mail_personal']) : '""') ); ?>');
                 $('#mail_instit').val('<?PHP printf( (!empty($datos['mail_instit']) ? strval($datos['mail_instit']) : '""') ); ?>');
                 $('#domicilio').val('<?PHP printf( (!empty($datos['domicilio']) ? strval($datos['domicilio']) : '""') ); ?>');
+                $('#tmp_curp').val('<?PHP printf( (!empty($datos['tmp_curp']) ? strval($datos['tmp_curp']) : '""') ); ?>');
                 Swal.fire(
                         'Error al modificar el registro',
                         msg,
@@ -391,6 +420,8 @@
                 $('#select-genero').val("2");
             var numEst = data.getElementsByTagName('NumEntidadReg')[0].childNodes[0].nodeValue - 1;
             $('#estado').val(numEstados[numEst]);
+            $('#tmp_curp').val(formatDate(new Date()));
+
         } catch (error) {
             Swal.fire(
                         'Error al validar la CURP',

@@ -72,7 +72,7 @@ class personasController extends Controller
 
     public function insertarPersona(Request $req){
         try {
-            $generos = DB::select("CALL personas.insertarpersona('$req->curp', '$req->rfc', '$req->apellido1', '$req->apellido2', '$req->nombre', $req->id_genero, '$req->domicilio', '$req->mail_personal', '$req->mail_instit')");
+            $persona = DB::select("CALL personas.insertarpersona('$req->curp', '$req->rfc', '$req->apellido1', '$req->apellido2', '$req->nombre', $req->id_genero, '$req->domicilio', '$req->mail_personal', '$req->mail_instit', '$req->tmp_curp')");
             $registros =  DB::select('select * from personas.getpersonas()');
             $accion = 'success';
             // $data->action = 'success'

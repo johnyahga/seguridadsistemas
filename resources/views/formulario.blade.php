@@ -25,6 +25,7 @@
                                 <div class="invalid-feedbackCURP" style="color-text:red; margin-top:5px; margin-left:10px; display:none;">Formato de CURP invalido.</div>
                             </div>
                         </div>
+                        
                         <!-- <div class="col-md-1">
                             <button type="button" style="margin-top:30px;" class="btn btn-primary btn-rounded btn-icon" onclick="buscarCURP()">
                                 <i class="fa fa-search"></i>
@@ -40,6 +41,12 @@
                                 <span class="spinner-border spinner-border-sm loader-rfc" role="status" style="margin-left: 10px; margin-top:5px; display: none;" aria-hidden="true"></span>
                                 <!-- <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> -->
                                 <div class="invalid-feedbackRFC" style="color-text:red; margin-top:5px; margin-left:10px; display:none;">Formato de RFC invalido.</div>
+                            </div>
+                        </div>
+                        <div class="col-md-12" style="display:none;">
+                        <div class="form-group">
+                                <label for="example-text-input" class="form-control-label">timestamp</label>
+                                <input class="form-control" name="tmp_curp" id="tmp_curp" type="text" placeholder="" required readonly>
                             </div>
                         </div>
                         <!-- <div class="col-md-1">
@@ -69,7 +76,7 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="example-text-input" class="form-control-label">Genero</label>
-                                <select class="form-select" name="id_genero" id="select-genero" aria-label="Default select example" required disabled>
+                                <select class="form-select" name="id_genero" id="select-genero" aria-label="Default select example" required>
                                     <option selected>Seleccionar genero</option>
                                     @foreach($generos as $gen)
                                         <option value="{{ $gen->id }}"> {{ $gen->genero }} </option>
@@ -202,6 +209,29 @@
 <script>
     var tabla;
     var action = 0;
+    function padTo2Digits(num) {
+        return num.toString().padStart(2, '0');
+    }
+
+    function formatDate(date) {
+    return (
+        [
+        date.getFullYear(),
+        padTo2Digits(date.getMonth() + 1),
+        padTo2Digits(date.getDate()),
+        ].join('-') +
+        ' ' +
+        [
+        padTo2Digits(date.getHours()),
+        padTo2Digits(date.getMinutes()),
+        padTo2Digits(date.getSeconds()),
+        ].join(':')
+    );
+    }
+
+    // (mm/dd/yyyy hh:mm:ss)
+    console.log(formatDate(new Date()));
+
 
     $(document).ready(function () {
         // console.log('hola mundo');
@@ -223,6 +253,7 @@
                 $('#mail_personal').val('<?PHP printf( (!empty($datos['mail_personal']) ? strval($datos['mail_personal']) : '""') ); ?>');
                 $('#mail_instit').val('<?PHP printf( (!empty($datos['mail_instit']) ? strval($datos['mail_instit']) : '""') ); ?>');
                 $('#domicilio').val('<?PHP printf( (!empty($datos['domicilio']) ? strval($datos['domicilio']) : '""') ); ?>');
+                $('#tmp_curp').val('<?PHP printf( (!empty($datos['tmp_curp']) ? strval($datos['tmp_curp']) : '""') ); ?>');
                 Swal.fire(
                         'Error al insertar registro',
                         msg,
@@ -394,6 +425,7 @@
                     $('#select-genero').val("3");
                 var numEst = data.getElementsByTagName('NumEntidadReg')[0].childNodes[0].nodeValue - 1;
                 $('#estado').val(numEstados[numEst]);
+                $('#tmp_curp').val(formatDate(new Date()) + '.000000');
 
             },
             error: function (msg) {
