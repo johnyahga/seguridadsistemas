@@ -8,7 +8,7 @@
             <div class="card">
                 <div class="card-header pb-0">
                     <div class="d-flex align-items-center">
-                        <p class="mb-0">Formulario Personas</p>
+                        <p class="mb-0">Formulario Usuarios</p>
                         <!-- <button class="btn btn-primary btn-sm ms-auto">Settings</button> -->
                     </div>
                 </div>

@@ -19,13 +19,13 @@
                     <div class="row">
                         <div class="col-md-7" style="display:none;">
                         <div class="form-group">
-                                <label for="example-text-input" class="form-control-label">ID</label>
+                                <label for="example-text-input" class="form-control-label">ID*</label>
                                 <input class="form-control"  value="{{ $persona[0]->id }}" name="id_persona" type="text" placeholder="" required readonly>
                             </div>
                         </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                                <label for="example-text-input" class="form-control-label">CURP</label>
+                                <label for="example-text-input" class="form-control-label">CURP*</label>
                                 <input class="form-control" onkeyup="javascript:this.value=this.value.toUpperCase();" value="{{ $persona[0]->curp }}" maxlength="18" name="curp" id="curp" type="text" placeholder="" required>
                                 <span class="spinner-border spinner-border-sm loader-curp" role="status" style="margin-left: 10px; margin-top:5px; display: none;" aria-hidden="true"></span>
                                 <div class="invalid-feedbackCURP" style="color-text:red; margin-top:5px; margin-left:10px; display:none;">Formato de CURP invalido.</div>
@@ -33,7 +33,7 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="example-text-input" class="form-control-label">RFC</label>
+                                <label for="example-text-input" class="form-control-label">RFC*</label>
                                 <input class="form-control" onkeyup="javascript:this.value=this.value.toUpperCase();" value="{{ $persona[0]->rfc }}" maxlength="13" name="rfc" id="rfc" type="text" placeholder="" required>
                                 <span class="spinner-border spinner-border-sm loader-rfc" role="status" style="margin-left: 10px; margin-top:5px; display: none;" aria-hidden="true"></span>
                                 <div class="invalid-feedbackRFC" style="color-text:red; margin-top:5px; margin-left:10px; display:none;">Formato de RFC invalido.</div>
@@ -47,25 +47,25 @@
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="example-text-input" class="form-control-label">Nombre</label>
+                                <label for="example-text-input" class="form-control-label">Nombre*</label>
                                 <input class="form-control" name="nombre" id="nombre" value="{{ $persona[0]->nombre }}" type="text" placeholder="Nombre de la persona" required readonly>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="example-text-input" class="form-control-label">Apellido Paterno</label>
+                                <label for="example-text-input" class="form-control-label">Apellido Paterno*</label>
                                 <input class="form-control" name="apellido1" id="apellido1" value="{{ $persona[0]->apellido_1 }}" type="text" placeholder="Apellido paterno" required readonly>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="example-text-input" class="form-control-label">Apellido Materno</label>
+                                <label for="example-text-input" class="form-control-label">Apellido Materno*</label>
                                 <input class="form-control" name="apellido2" id="apellido2" value="{{ $persona[0]->apellido_2 }}" type="text" placeholder="Apellido materno" required readonly>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="example-text-input" class="form-control-label">Genero</label>
+                                <label for="example-text-input" class="form-control-label">Genero*</label>
                                 <select class="form-select" name="id_genero" id="select-genero" aria-label="Default select example" required>
                                     <option>Seleccionar genero</option>
                                     @foreach($generos as $gen)
@@ -87,7 +87,7 @@
 
                         <div class="col-md-8">
                             <div class="form-group">
-                                <label for="example-text-input" class="form-control-label">Estado</label>
+                                <label for="example-text-input" class="form-control-label">Estado*</label>
                                 <input class="form-control" type="text" id="estado" name="estado" placeholder="" readonly>
                             </div>
                         </div>
@@ -101,19 +101,19 @@
                        
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="example-text-input" class="form-control-label">Email personal</label>
+                                <label for="example-text-input" class="form-control-label">Email personal*</label>
                                 <input class="form-control" type="email" id="mail_personal" name="mail_personal" value="{{ $persona[0]->mail_personal }}" placeholder="email@example.com" required>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="example-text-input" class="form-control-label">Email institucional</label>
+                                <label for="example-text-input" class="form-control-label">Email institucional*</label>
                                 <input class="form-control" type="email" id="mail_instit" name="mail_instit" value="{{ $persona[0]->mail_instit }}"  placeholder="email@example.com" required>
                             </div>
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="example-text-input" class="form-control-label">Domicilio</label>
+                                <label for="example-text-input" class="form-control-label">Domicilio*</label>
                                 <input class="form-control" type="text" id="domicilio" name="domicilio" value="{{ $persona[0]->domicilio }}" placeholder="" required>
                             </div>
                         </div>

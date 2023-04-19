@@ -16,4 +16,20 @@ class usuariosController extends Controller
         $data = DB::select("select * from seguridad.getusuario($req->id_usuario)");
         return $data;
     }
+
+    public function getUsuarios(Request $req){
+        $data =  DB::select('select * from seguridad.getusuarios()');
+        return $data;
+    }
+
+    public function activarDesactivarUsuario(Request $req){
+        // $activar = true;
+        if($req->estado)
+            $data = DB::select("CALL seguridad.desactivarusuario($req->id_usuario, false)");
+        else
+            $data = DB::select("CALL seguridad.desactivarusuario($req->id_usuario, true)");
+
+        return $data;
+    }
+
 }

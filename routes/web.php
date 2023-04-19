@@ -88,8 +88,17 @@ Route::post('/insertar-persona', function(Request $req){
     }
 })->name('insertar-persona');
 
+Route::get('/prueba_demo', function(Request $req){
+    echo "hola";
+    // $nuevoId = 0;
+    // $newId = DB::select("select * from personas.insertgenero2function('$req->nombre_g')");
+    // dd($newId[0]->insertgenero2function);
+});
+
 Route::get('/usuarios', [usuariosController::class, "usuarios"])->name("usuarios-registros");
 Route::get('/usuarios/get-usuario', [usuariosController::class, "getUsuario"])->name("ver-usuario");
+Route::get('/usuarios/get-usuarios', [usuariosController::class, "getUsuarios"])->name("get-usuarios");
+Route::get('/usuarios/desactivar-usuario', [usuariosController::class, "activarDesactivarUsuario"])->name("desactivar-usuario");
 Route::get('/aplicaciones', [personasController::class, "usuarios"])->name("aplicaciones-registros");
 Route::get('/permisos', [personasController::class, "usuarios"])->name("permisos-registros");
 Route::get('/roles', [usuariosController::class, "usuarios"])->name("roles-registros");

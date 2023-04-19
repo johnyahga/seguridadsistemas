@@ -13,9 +13,9 @@
             </div>
         </div>
         <!-- descomentar en caso de que falle el responsive -->
-        <div class="table-responsive">
+        <!-- <div class="table-responsive"> -->
         <!-- comentar en caso de que falle el responsive -->
-        <!-- <div class=""> -->
+        <div class="">
             <table class="table align-items-center mb-0">
                 <thead>
                   <tr>
@@ -205,6 +205,21 @@
                     </div>
                   </div>
 
+                  <div class="col-6">
+                    <div class="form-group">
+                      <label for="curp_validado">CURP validado</label>
+                      <input type="text" id="curp_validado" class="form-control" name="" 
+                     readonly>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="form-group">
+                      <label for="rfc_validado">RFC validado</label>
+                      <input type="text" id="rfc_validado" class="form-control" name="" 
+                        readonly>
+                    </div>
+                  </div>
+
                 </div>
               </div>
             </form>
@@ -345,6 +360,8 @@
                     $('#verEmail1').val(data[0].mail_personal);
                     $('#verEmail2').val(data[0].mail_instit);
                     $('#verDomicilio').val(data[0].domicilio);
+                    $('#rfc_validado').val(data[0].rfc_validado);
+                    $('#curp_validado').val(data[0].curp_validado);
                 },
                 error:function( ) {
                     

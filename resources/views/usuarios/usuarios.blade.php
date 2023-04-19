@@ -12,13 +12,13 @@
                 <h6 class="mb-2">Registros Usuarios</h6> 
             </div>
             <div>
-              <button type="button" class="btn btn-primary">Nuevo Usuario</button>
+              <button type="button" class="btn btn-primary" id="btn_nuevo">Nuevo Usuario</button>
             </div>
         </div>
         <!-- descomentar en caso de que falle el responsive -->
-        <div class="table-responsive">
+        <!-- <div class="table-responsive"> -->
         <!-- comentar en caso de que falle el responsive -->
-        <!-- <div class=""> -->
+        <div class="">
             <table class="table align-items-center mb-0">
                 <thead>
                   <tr>
@@ -61,8 +61,8 @@
                                             </li>
                                             
                                             <li>
-                                            <a  onclick="eliminar({{$registro->id}})" class="dropdown-item" href="#">
-                                                    <i class="fas fa-trash"></i> Eliminar registro
+                                            <a  onclick="activarDesactivar({{$registro->id}},{{$registro->estado}})" class="dropdown-item" href="#">
+                                                    <i class="fas fa-on"></i> {{ $registro->estado ? 'Desactivar' : 'Activar' }} usuario
                                                 </a>
                                             </li>
                                         </ul>
@@ -99,8 +99,8 @@
                                             </li>
                                             
                                             <li>
-                                            <a  onclick="eliminar({{$registros[0]->id}})" class="dropdown-item" href="#">
-                                                    <i class="fas fa-trash"></i> Eliminar registro
+                                            <a  onclick="activarDesactivar({{$registros[0]->id}},{{$registros[0]->estado}})" class="dropdown-item" href="#">
+                                                    <i class="fas fa-power-off"></i> {{ $registros[0]->estado ? 'Desactivar' : 'Activar' }} usuario
                                                 </a>
                                             </li>
                                     </ul>
@@ -119,6 +119,63 @@
 </div>
 </div>
 </div>
+
+<!-- MODAL Registro -->
+<div class="modal fade" id="modalRegistro" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" >
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Datos de Usuario</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+      <div class="d-flex justify-content-center" >
+      <!-- <span class="fa fa-spinner fa-spin fa-3x" style="" id="loaderVista"></span> -->
+      </div>
+      <div class="card-body" id="form-registro">
+            <form method="POST"
+              class="form form-vertical" enctype="multipart/form-data">
+              <div class="form-body">
+                <div class="row">
+
+                  <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="example-text-input" class="form-control-label">Persona*</label>
+                        <select class="form-select" name="id_persona" id="select-persona" aria-label="Default select example" required>
+                            <!-- <option selected>Seleccionar persona</option> -->
+                        </select>
+                        <span class="spinner-border spinner-border-sm loader-personas" role="status" style="margin-left: 10px; margin-top:5px; display: none;" aria-hidden="true"></span>                        
+                    </div>
+                  </div>
+
+                  <div class="col-6">
+                    <div class="form-group">
+                      <label for="user_name">Usuario</label>
+                      <input type="text" id="user_name" class="form-control" name="user_name" value="" readonly>
+                    </div>
+                  </div>
+
+                  <div class="col-6">
+                    <div class="form-group">
+                      <label for="pass">Contraseña</label>
+                      <input type="password" id="pass" class="form-control" name="pass" value="" >
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </form>
+          </div>
+      </div>
+    
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-primary">Guardar</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- FIN MODAL Registro -->
 
 <!-- MODAL Ver -->
 <div class="modal fade" id="modalVisualizar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" >
@@ -203,18 +260,19 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Confirmar eliminar registro</h5>
+        <h5 class="modal-title" id="text-title-modal">Confirmar accion</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="$('#confirmarModal').modal('hide');">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        ¿Seguro que quieres eliminar el registro?
-        <input type="hidden" id="id_persona_eliminar" name="id_persona_eliminar" value=""/>
+        <div class="msj-modal">¿Seguro que quieres desactivar este usuario?</div>
+        <input type="hidden" id="id_usuario_accion" name="id_usuario_accion" value=""/>
+        <input type="hidden" id="estado_usuario" name="estado_usuario" value=""/>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="$('#confirmarModal').modal('hide');">Cancelar</button>
-        <button type="button" class="btn btn-primary" onclick="eliminarPersona()" >Confirmar</button>
+        <button type="button" class="btn btn-primary" onclick="desactivarUser()" >Confirmar</button>
       </div>
     </div>
   </div>
@@ -290,8 +348,8 @@
                 },
                 success:function( ) {
                     Swal.fire(
-                        'Registro eliminado',
-                        'Se ha eliminado un registro correctamente',
+                        'Usuario desactivado',
+                        'Se ha desactivado el usuario correctamente',
                         'success'
                         );
                     actualizarTabla();
@@ -301,6 +359,29 @@
                 },
             });  
     }
+
+    $('#btn_nuevo').on('click', function(){
+      $('#modalRegistro').modal('show');
+        $.ajax({
+                method: "get",
+                url: "get-personas",
+                // data: { id_usuario: id },
+                beforeSend: function() {
+                  $('.loader-personas').css('display','block');
+                },
+                success:function(data) {
+                  $('.loader-personas').css('display','none');
+                  html_options = "<option selected> Seleccionar persona </option>";
+                  $.each( data, function (i, d){
+                        html_options += `<option value=`+d.id+`>` + d.nombre +` `+d.apellido_1+ ` `+d.apellido_2+`</option>`;
+                    });
+                    $('#select-persona').html(html_options);
+                },
+                error:function( ) {
+                    
+                },
+        });
+    });
 
     function ver(id){
         $('#modalVisualizar').modal('show');
@@ -330,28 +411,89 @@
             });  
     }
 
+    $( "#select-persona" )
+        .change(function () {
+          var id = 0;
+          $( "select option:selected" ).each(function() {
+            id += $( this ).val();
+          });
+          $.ajax({
+                method: "get",
+                url: "get-persona",
+                data: {
+                  id_persona: id
+                },
+                beforeSend: function() {
+                    console.log(id);
+                },
+                success:function( data ) {
+                  $('#user_name').val(data[0].mail_instit);
+                }});
+          // $( "div" ).text( str );
+        }).change();
+
     function editar(id_persona){
       window.location = '/editar-persona-form?id_persona=' + id_persona;
+    }
+
+    function desactivarUser(){
+      $.ajax({
+        method: "get",
+        url: "usuarios/desactivar-usuario",
+        data: {
+          id_usuario: $('#id_usuario_accion').val(),
+          estado: $('#estado_usuario').val()
+        },
+        beforeSend: function() {
+          $('#confirmarModal').modal('hide');
+        },
+        success:function( data ) {
+          actualizarTabla();
+          if($('#estado_usuario').val())
+            state = "desactivado";
+          else
+            state = "activado";
+          Swal.fire(
+                        'Usuario '+state,
+                        'Se ha '+state+' el usuario correctamente',
+                        'success'
+                        );
+        }
+      });
+    }
+
+    function activarDesactivar(id, estado){
+      $('#confirmarModal').modal('show');
+      var msj="activar";
+      if(estado)
+        msj="desactivar";
+
+      $('#id_usuario_accion').val(id);
+      $('#estado_usuario').val(estado);
+      $('#msj-modal').html('¿Seguro que quieres' +msj+ 'este usuario?');
+      // $('#msj-modal').html('¿Seguro que quieres desactivar este usuario?');
     }
 
     function actualizarTabla(){
         $.ajax({
                 method: "get",
-                url: "get-personas",
+                url: "/usuarios/get-usuarios",
                 beforeSend: function() {
                     console.log('hola');
                 },
                 success:function( data ) {
                     htmldata = "";
                     $.each( data, function (i, d){
+                        nameEstado="";
+                        if(d.estado)
+                          nameEstado = 'Activo'; 
+                        else
+                          nameEstado = 'Inactivo'; 
                         htmldata += `<tr>
                                         <td class="align-middle text-center text-sm"> `+d.id+` </td>
-                                        <td class="mb-0 text-sm"> `+d.nombre+` </td><!--class="text-xs text-secondary mb-0"-->
-                                        <td class="mb-0 text-sm"> `+d.apellido_1+` </td>
-                                        <td class="mb-0 text-sm"> `+d.apellido_2+` </td>
-                                        <td class="mb-0 text-sm"> `+d.curp+` </td>
-                                        <td class="mb-0 text-sm"> `+d.rfc+` </td>
-                                        <td class="mb-0 text-sm"> `+d.genero+` </td> 
+                                        <td class="mb-0 text-sm"> `+d.user_name+` </td><!--class="text-xs text-secondary mb-0"-->
+                                        <td class="mb-0 text-sm"> `+d.nombre_persona+` </td>
+                                        <td class="mb-0 text-sm"> `+nameEstado+` </td>
                                         <td class="align-middle">
                                             <div class="dropdown">
                                                 <button class="btn btn-link text-secondary mb-0 "
@@ -372,8 +514,8 @@
                                                     </li>
                                                     
                                                     <li>
-                                                    <a  onclick="eliminar(`+d.id+`)" class="dropdown-item" href="#">
-                                                            <i class="fas fa-trash"></i> Eliminar registro
+                                                    <a  onclick="activarDesactivar(`+d.id+`,`+ d.estado +`)" class="dropdown-item" href="#">
+                                                            <i class="fas fa-power-off"></i>  ${d.estado ? 'Desactivar' : 'Activar'}  usuario
                                                         </a>
                                                     </li>
                                                 </ul>
@@ -383,12 +525,6 @@
                                     </tr>`;
                     });
                     $('#table-body').html(htmldata);
-                    // Swal.fire(
-                    //     'Nuevo registro',
-                    //     'Se ha agregado un nuevo genero correctamente',
-                    //     'success'
-                    //     );
-                    // alert('Se ha agregado un nuevo registro!');
                 },
                 error:function( data ) {
                     //alert('jjola'+data);
