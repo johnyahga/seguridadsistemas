@@ -22,6 +22,16 @@ class usuariosController extends Controller
         return $data;
     }
 
+    public function insertUsuario(Request $req){
+        $hashpw = PASSWORD_HASH($req->pass, PASSWORD_DEFAULT);
+        $data = DB::select("CALL seguridad.insertarusuario($req->id_persona, '$req->user_name', '$hashpw')");
+    }
+
+    public function updateUsuario(Request $req){
+        $hashpw = PASSWORD_HASH($req->pass, PASSWORD_DEFAULT);
+        $data = DB::select("CALL seguridad.actualizarusuario($req->id_usuario, $req->id_persona, '$req->user_name', '$hashpw')");
+    }
+
     public function activarDesactivarUsuario(Request $req){
         // $activar = true;
         if($req->estado)

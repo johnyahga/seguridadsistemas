@@ -121,7 +121,7 @@
                     
                     <div class="text-right col-md-12 ">
                         <div class="btn btn-danger mt-4" id="btn_cancel" data-toggle="modal" data-target="#confirmarModal">Cancelar</div>
-                        <div type="submit" class="btn btn-success mt-4 submit" id="btn_confirm" data-toggle="modal" data-target="#confirmarModal">Guardar</div>
+                        <div type="submit" class="btn btn-success mt-4 submit" id="btn_confirm" data-toggle="modal" data-target="#confirmarModal">Actualizar</div>
                     </div>
                 </div>
                 </form>
@@ -179,13 +179,13 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="confirmarModalLabel">Confirmar guardar registro</h5>
+        <h5 class="modal-title" id="confirmarModalLabel">Confirmar actualizar registro</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="$('#confirmarModal').modal('hide');">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body" id="confirmarModalBody">
-        ¿Seguro que desea registrar los datos?
+        ¿Seguro que desea actualizar los datos?
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="$('#confirmarModal').modal('hide');">Cancelar</button>
@@ -407,7 +407,7 @@
         'Tabasco',
         'Tamaulipas',
         'Tlaxcala',
-        'Veracruz-Llave',
+        'Veracruz',
         'Yucatan',
         'Zacatecas'];
             $('#nombre').val(data.getElementsByTagName('NombreS')[0].childNodes[0].nodeValue);

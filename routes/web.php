@@ -97,6 +97,8 @@ Route::get('/prueba_demo', function(Request $req){
 
 Route::get('/usuarios', [usuariosController::class, "usuarios"])->name("usuarios-registros");
 Route::get('/usuarios/get-usuario', [usuariosController::class, "getUsuario"])->name("ver-usuario");
+Route::get('/usuarios/insertar-usuarios', [usuariosController::class, "insertUsuario"])->name("insertar-usuarios");
+Route::get('/usuarios/actualizar-usuarios', [usuariosController::class, "updateUsuario"])->name("actualizar-usuarios");
 Route::get('/usuarios/get-usuarios', [usuariosController::class, "getUsuarios"])->name("get-usuarios");
 Route::get('/usuarios/desactivar-usuario', [usuariosController::class, "activarDesactivarUsuario"])->name("desactivar-usuario");
 Route::get('/aplicaciones', [personasController::class, "usuarios"])->name("aplicaciones-registros");

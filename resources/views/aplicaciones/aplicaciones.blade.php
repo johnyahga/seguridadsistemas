@@ -9,10 +9,10 @@
     <div class="card ">
         <div class="card-header pb-0 p-3">
             <div class="d-flex justify-content-between">
-                <h6 class="mb-2">Registros Usuarios</h6> 
+                <h6 class="mb-2">Registros Aplicaciones</h6> 
             </div>
             <div>
-              <button type="button" class="btn btn-primary" id="btn_nuevo">Nuevo Usuario</button>
+              <button type="button" class="btn btn-primary" id="btn_nuevo">Nueva aplicación</button>
             </div>
         </div>
         <!-- descomentar en caso de que falle el responsive -->
@@ -145,13 +145,6 @@
                     </div>
                   </div>
 
-                  <div class="col-6" style="display:none;">
-                    <div class="form-group">
-                      <label for="id_usuario">ID</label>
-                      <input type="text" id="id_usuario" class="form-control" name="id_usuario" value="" readonly>
-                    </div>
-                  </div>
-
                   <div class="col-6">
                     <div class="form-group">
                       <label for="user_name">Usuario</label>
@@ -174,8 +167,7 @@
     
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-        <button type="button" class="btn btn-primary" id="btn_guardar">Guardar</button>
-        <button type="button" class="btn btn-primary" id="btn_modificar">Actualizar</button>
+        <button type="button" class="btn btn-primary">Guardar</button>
       </div>
     </div>
   </div>
@@ -336,14 +328,8 @@
             });  
     }
 
-    
-
     $('#btn_nuevo').on('click', function(){
-      $('#pass').val('');
-      $('#user_name').val('');
       $('#modalRegistro').modal('show');
-      $('#btn_guardar').css('display','block');
-      $('#btn_modificar').css('display','none');
         $.ajax({
                 method: "get",
                 url: "get-personas",
@@ -414,62 +400,9 @@
           // $( "div" ).text( str );
         }).change();
 
-        $('#btn_modificar').on('click', function(){
-          $.ajax({
-                method: "get",
-                url: "/usuarios/actualizar-usuarios",
-                data: { id_persona: $('#select-persona').val(),
-                        id_usuario: $('#id_usuario').val(),
-                        user_name: $('#user_name').val(),
-                        pass: $('#pass').val() },
-                beforeSend: function() {
-                  $('#modalRegistro').modal('hide');
-                },
-                success:function(data) {
-                  Swal.fire(
-                        'Usuario actualizado',
-                        'Se ha actualizado el usuario correctamente',
-                        'success'
-                        );
-                        actualizarTabla();
-                },
-                error:function( ) {
-                    
-                },
-          });
-        });
-
-        $('#btn_guardar').on('click', function(){
-          $.ajax({
-                method: "get",
-                url: "/usuarios/insertar-usuarios",
-                data: { id_persona: $('#select-persona').val(),
-                        user_name: $('#user_name').val(),
-                        pass: $('#pass').val() },
-                beforeSend: function() {
-                  $('#modalRegistro').modal('hide');
-                },
-                success:function(data) {
-                  Swal.fire(
-                        'Usuario registrado',
-                        'Se ha registrado un nuevo usuario correctamente',
-                        'success'
-                        );
-                        actualizarTabla();
-                },
-                error:function( ) {
-                    
-                },
-          });
-        })
-
     function editar(id_usuario){
-      $('#pass').val('');
-      $('#user_name').val('');
-      $('#id_usuario').val(id_usuario);
-      $('#modalRegistro').modal('show');
-      $('#btn_guardar').css('display','none');
-      $('#btn_modificar').css('display','block');
+      $('modalRegistro').modal('show');
+
       $.ajax({
                 method: "get",
                 url: "get-personas",
@@ -483,7 +416,6 @@
                   $.each( data, function (i, d){
                         html_options += `<option value=`+d.id+`>` + d.nombre +` `+d.apellido_1+ ` `+d.apellido_2+`</option>`;
                     });
-
                     $('#select-persona').html(html_options);
 
                     $.ajax({
@@ -495,10 +427,11 @@
                       beforeSend: function() {
 
                       },
-                      success:function( data2 ) {
-                        $('#select-persona').val(data2[0].id_persona);
-                        $('#user_name').val(data2[0].user_name);
+                      success:function( data ) {
+                        $('#select-persona').val(data.id_persona);
+                        $('#user_name').val(data.user_name);
                         $('#pass').val('0000000000');
+                        // actualizarTabla();
                       }
                     });
                 },

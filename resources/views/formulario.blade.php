@@ -410,12 +410,15 @@
 			 'Tabasco',
 			 'Tamaulipas',
 			 'Tlaxcala',
-			 'Veracruz-Llave',
+			 'Veracruz',
 			 'Yucatan',
 			 'Zacatecas'];
                 $('#nombre').val(data.getElementsByTagName('NombreS')[0].childNodes[0].nodeValue);
+                $('#nombre').css('border-color','gray');
                 $('#apellido1').val(data.getElementsByTagName('Apellido1')[0].childNodes[0].nodeValue);
+                $('#apellido1').css('border-color','gray');
                 $('#apellido2').val(data.getElementsByTagName('Apellido2')[0].childNodes[0].nodeValue);
+                $('#apellido2').css('border-color','gray');
                 var genero = data.getElementsByTagName('Sexo')[0].childNodes[0].nodeValue;
                 if(genero == "H")
                     $('#select-genero').val("1");
@@ -425,6 +428,7 @@
                     $('#select-genero').val("3");
                 var numEst = data.getElementsByTagName('NumEntidadReg')[0].childNodes[0].nodeValue - 1;
                 $('#estado').val(numEstados[numEst]);
+                $('#estado').css('border-color','gray');
                 $('#tmp_curp').val(formatDate(new Date()) + '.000000');
 
             },
@@ -471,11 +475,16 @@
         });
     }
 
+    $('#form_persona input').on('change', function(){
+        $(this).css('border-color', 'gray');
+    })
+
     function ValidateForm() {
         var formInvalid = false;
         $('#form_persona input').each(function() {
         if ($(this).val() === '') {
             formInvalid = true;
+            $(this).css('border-color', 'red');
         }
         });
         return formInvalid;
